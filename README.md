@@ -87,3 +87,7 @@ npm run dev
 ```
 
 Browse to the specified localhost URL in your web browser.
+
+## License
+
+[MIT](LICENSE) © 2023 OrbitDB Community

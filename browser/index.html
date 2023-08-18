@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <title>OrbitDB Webapp</title>
+    </head>
+    
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/ipfs/dist/index.min.js"></script>
+        <script src="./orbitdb.min.js"></script>
+        <script language="Javascript" type="text/javascript">
+        document.addEventListener('DOMContentLoaded', async () => {
+          const ipfs = await Ipfs.create()
+          console.log('version', await ipfs.version())
+          const orbitdb = await OrbitDB.create({ ipfs })
+          const db = await orbitdb.open('browser')
+          console.log(db.address)
+        })
+        </script>
+    </body>
+</html>

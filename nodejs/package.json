@@ -1,0 +1,19 @@
+{
+  "name": "orbitdb-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "eth-crypto": "^2.6.0",
+    "ipfs-core": "^0.18.1",
+    "key-did-provider-ed25519": "^3.0.1",
+    "key-did-resolver": "^3.0.0",
+    "uint8arrays": "^4.0.4"
+  }
+}

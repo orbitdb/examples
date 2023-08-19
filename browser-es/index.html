@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>OrbitDB Webapp</title>
+    </head>
+    
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/ipfs/dist/index.min.js"></script>
+        <script type="module">
+        // this is not a webpacked ES module so destructuring module exports
+        // doesn't work.
+        import * as OrbitDB from './orbitdb.min.js'
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+          const ipfs = await Ipfs.create()
+          const orbitdb = await OrbitDB.createOrbitDB({ ipfs })
+          const db = await orbitdb.open('browser')
+          console.log(db.address)
+        })
+        </script>
+    </body>
+</html>

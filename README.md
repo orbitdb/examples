@@ -41,6 +41,19 @@ python3 -m http.server 8081
 
 Browse to http://localhost:8081/
 
+### Browser ES
+
+Run OrbitDB as a simple web app for ES compatible browsers (e.g. <script type="module"/>).
+
+Launch a local web server. For example, you can use the [Python's HTTP server](https://docs.python.org/3/library/http.server.html):
+
+```
+cd ./browser-es
+python3 -m http.server 8081
+```
+
+Browse to http://localhost:8081/
+
 ### Webpack
 
 Integrate OrbitDB with a webpacked app.

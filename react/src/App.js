@@ -5,10 +5,11 @@ import { createOrbitDB } from '@orbitdb/core';
 
 function App() {
   const [address, setAddress] = useState('');
-
+  let loading = false;
+  
   useEffect(() => {
-    async function getAddress() {
-      const ipfs = await create({repo: 'ok' + Math.random()});
+    async function loadDB() {
+      const ipfs = await create({repo: 'orbitdb-examples-react'});
       const orbitdb = await createOrbitDB({ ipfs });
       const db = await orbitdb.open('my-db')
       setAddress(db.address);
@@ -16,7 +17,10 @@ function App() {
       await ipfs.stop()
     }
     
-    getAddress()
+    if (!loading) {
+      loading = true
+      loadDB()
+    }
   }, []);
   
   return (

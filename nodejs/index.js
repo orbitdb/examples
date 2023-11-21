@@ -7,6 +7,10 @@
  * ```bash
  * node index.js
  * ```
+ * or
+ * ```bash
+ * node index.js /orbitdb/<hash>
+ * ```
  */
 import * as Ipfs from 'ipfs-core'
 import { createOrbitDB, OrbitDBAccessController } from '@orbitdb/core'
@@ -29,20 +33,39 @@ const config = {
   }
 }
 
-const ipfs = await Ipfs.create({ repo: './ipfs', config: config })
+const id = process.argv.length > 2 ? 2 : 1
 
-const orbitdb = await createOrbitDB({ ipfs: ipfs, id: 'nodejs', directory: './orbitdb' })
+const ipfs = await Ipfs.create({ repo: `./ipfs/${id}`, config: config })
 
-const db = await orbitdb.open('nodejs')
+const orbitdb = await createOrbitDB({ ipfs: ipfs, id: 'nodejs', directory: `./orbitdb/${id}` })
 
-await db.add('hello world 1')
+let db
 
-for await (const res of db.iterator()) {
-  console.log(res)
+if (process.argv.length > 2) {
+  const remoteDBAddress = process.argv.pop()
+  
+  db = await orbitdb.open(remoteDBAddress)
+
+  await db.add('hello world 1')
+
+  for await (const res of db.iterator()) {
+    console.log(res)
+  }
+} else {
+  db = await orbitdb.open('nodejs', { AccessController: OrbitDBAccessController({ write: ['*'] }) })
+  
+  console.log(db.address)
+
+  db.events.on('update', event => {
+    console.log('update', event)
+  })
 }
 
-await db.close()
-await orbitdb.stop()
-await ipfs.stop()
+process.on('SIGINT', async () => {
+  console.log("exiting...")
 
-process.exit(0)
+  await db.close()
+  await orbitdb.stop()
+  await ipfs.stop()
+  process.exit(0)
+})

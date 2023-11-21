@@ -4,3 +4,6 @@ dist
 
 # Editor directories and files
 .vscode/*
+
+ipfs
+orbitdb

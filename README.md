@@ -20,13 +20,34 @@ git clone https://github.com/orbitdb/orbitdb-examples.git
 
 Bundle OrbitDB in a node application.
 
+The Node.js demo provides an example of how OrbitDB uses IPFS to replicate records across peers.
+
 Install the 3rd party NPM packages and run the example:
 
-```
+```bash
 cd ./nodejs
 npm i
+```
+
+Run two terminal windows, terminal 1 and terminal 2.
+
+In terminal 1, run the following:
+
+```bash
 node index.js
 ```
+
+Once running, an OrbitDB address will be printed in the form /orbitdb/<hash>. Copy this before moving on to the next step.
+
+In terminal 2, run index.js, passing the OrbitDB address you copied from the other window:
+
+```bash
+node index.js /orbitdb/<hash>
+```
+
+You should see the second peer add a record which the first peer should also print to the screen.
+
+To close the peers and exit the two instances of the daemon, press ctrl+c in each of the terminal windows.
 
 ### Browser
 

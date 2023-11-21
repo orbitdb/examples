@@ -10,7 +10,6 @@ export default (env, argv) => {
   return {
     target: 'web',
     entry: './src/index.js',
-    // entry: './test/index.test.js',
     mode: 'development',
     output: {
       filename: 'main.js',

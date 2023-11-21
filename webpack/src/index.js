@@ -17,6 +17,6 @@ const ipfs = await Ipfs.create({
 })
 
 console.log(ipfs)
-const orbitdb = await OrbitDB.create({ ipfs })
+const orbitdb = await OrbitDB.createOrbitDB({ ipfs })
 const db = await orbitdb.open('my-db')
 console.log(db.address)

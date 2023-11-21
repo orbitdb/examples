@@ -9,7 +9,7 @@
  * ```
  */
 import * as Ipfs from 'ipfs-core'
-import { create, OrbitDBAccessController } from '@orbitdb/core'
+import { createOrbitDB, OrbitDBAccessController } from '@orbitdb/core'
 
 const config = {
   Addresses: {
@@ -31,7 +31,7 @@ const config = {
 
 const ipfs = await Ipfs.create({ repo: './ipfs', config: config })
 
-const orbitdb = await create({ ipfs: ipfs, id: 'nodejs', directory: './orbitdb' })
+const orbitdb = await createOrbitDB({ ipfs: ipfs, id: 'nodejs', directory: './orbitdb' })
 
 const db = await orbitdb.open('nodejs')
 

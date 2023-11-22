@@ -14,6 +14,8 @@
  */
 import * as Ipfs from 'ipfs-core'
 import { createOrbitDB, OrbitDBAccessController } from '@orbitdb/core'
+import { mplex } from '@libp2p/mplex'
+import { yamux } from '@chainsafe/libp2p-yamux'
 
 const config = {
   Addresses: {
@@ -33,9 +35,17 @@ const config = {
   }
 }
 
+// Add more muxers (helps with testing against Helia and Kubo)
+const libp2p = {
+  streamMuxers: [
+    mplex(),
+    yamux()
+  ]
+}
+
 const id = process.argv.length > 2 ? 2 : 1
 
-const ipfs = await Ipfs.create({ repo: `./ipfs/${id}`, config: config })
+const ipfs = await Ipfs.create({ repo: `./ipfs/${id}`, config, libp2p })
 
 const orbitdb = await createOrbitDB({ ipfs: ipfs, id: 'nodejs', directory: `./orbitdb/${id}` })
 

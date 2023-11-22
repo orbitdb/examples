@@ -16,7 +16,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@orbitdb/core": "^0.30.1",
+    "@orbitdb/core": "^1.0.1",
     "ipfs-core": "^0.14.3",
     "process": "^0.11.10"
   }

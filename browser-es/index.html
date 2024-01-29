@@ -4,15 +4,20 @@
     </head>
     
     <body>
-        <script src="https://cdn.jsdelivr.net/npm/ipfs/dist/index.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@chainsafe/libp2p-gossipsub@11.1.0/dist/index.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/helia@4.0.0/dist/index.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@orbitdb/core@2.0.1/dist/orbitdb.min.js"></script>
         <script type="module">
-        // this is not a webpacked ES module so destructuring module exports
-        // doesn't work.
-        import * as OrbitDB from './orbitdb.min.js'
-        
         document.addEventListener('DOMContentLoaded', async () => {
-          const ipfs = await Ipfs.create()
-          const orbitdb = await OrbitDB.createOrbitDB({ ipfs })
+          const { createHelia, libp2pDefaults } = Helia
+          const { createOrbitDB } = OrbitDB
+          const { gossipsub } = ChainsafeLibp2PGossipsub
+          const libp2pOptions = libp2pDefaults()
+
+          libp2pOptions.services.pubsub = gossipsub()
+
+          const ipfs = await createHelia({ libp2p: libp2pOptions })
+          const orbitdb = await createOrbitDB({ ipfs })
           const db = await orbitdb.open('browser')
           console.log(db.address)
         })

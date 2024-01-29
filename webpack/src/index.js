@@ -1,22 +1,11 @@
-import * as Ipfs from 'ipfs-core'
-import * as OrbitDB from '@orbitdb/core'
+import { createHelia, libp2pDefaults } from 'helia'
+import { gossipsub } from '@chainsafe/libp2p-gossipsub'
+import { createOrbitDB } from '@orbitdb/core'
 
-const ipfs = await Ipfs.create({
-  config: {
-    Addresses: {
-      Swarm: [
-        '/ip4/0.0.0.0/tcp/12345/ws/p2p-webrtc-star'
-      ],
-      API: '',
-      Gateway: ''
-    }
-  },
-  EXPERIMENTAL: {
-    pubsub: true
-  }
-})
-
-console.log(ipfs)
-const orbitdb = await OrbitDB.createOrbitDB({ ipfs })
+console.log('setup')
+const libp2pOptions = libp2pDefaults()
+libp2pOptions.services.pubsub = gossipsub()
+const ipfs = await createHelia({ libp2p: libp2pOptions })
+const orbitdb = await createOrbitDB({ ipfs })
 const db = await orbitdb.open('my-db')
 console.log(db.address)

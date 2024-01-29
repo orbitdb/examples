@@ -12,42 +12,50 @@
  * node index.js /orbitdb/<hash>
  * ```
  */
-import * as Ipfs from 'ipfs-core'
+import { createHelia } from 'helia'
 import { createOrbitDB, OrbitDBAccessController } from '@orbitdb/core'
-import { mplex } from '@libp2p/mplex'
+import { createLibp2p } from 'libp2p'
+import { identify } from '@libp2p/identify'
+import { mdns } from '@libp2p/mdns'
 import { yamux } from '@chainsafe/libp2p-yamux'
+import { tcp } from '@libp2p/tcp'
+import { gossipsub } from '@chainsafe/libp2p-gossipsub'
+import { noise } from '@chainsafe/libp2p-noise'
+import { LevelBlockstore } from 'blockstore-level'
 
-const config = {
-  Addresses: {
-    API: '/ip4/127.0.0.1/tcp/0',
-    Swarm: ['/ip4/0.0.0.0/tcp/0'],
-    Gateway: '/ip4/0.0.0.0/tcp/0'
+const libp2pOptions = {
+  peerDiscovery: [
+    mdns()
+  ],     
+  addresses: {
+    listen: [
+      '/ip4/0.0.0.0/tcp/0'
+    ]
   },
-  Bootstrap: [],
-  Discovery: {
-    MDNS: {
-      Enabled: true,
-      Interval: 0
-    },
-    webRTCStar: {
-      Enabled: false
-    }
-  }
-}
-
-// Add more muxers (helps with testing against Helia and Kubo)
-const libp2p = {
+  transports: [
+    tcp()
+  ],    
+  connectionEncryption: [
+    noise()
+  ],
   streamMuxers: [
-    mplex(),
     yamux()
-  ]
+  ],
+  services: {
+    identify: identify(),
+    pubsub: gossipsub({ emitSelf: true })
+  }
 }
 
 const id = process.argv.length > 2 ? 2 : 1
 
-const ipfs = await Ipfs.create({ repo: `./ipfs/${id}`, config, libp2p })
+const blockstore = new LevelBlockstore(`./ipfs/${id}`)
 
-const orbitdb = await createOrbitDB({ ipfs: ipfs, id: 'nodejs', directory: `./orbitdb/${id}` })
+const libp2p = createLibp2p(libp2pOptions)
+
+const ipfs = await createHelia({ libp2p, blockstore })
+
+const orbitdb = await createOrbitDB({ ipfs, id: `nodejs-${id}`, directory: `./orbitdb/${id}` })
 
 let db
 
@@ -56,7 +64,7 @@ if (process.argv.length > 2) {
   
   db = await orbitdb.open(remoteDBAddress)
 
-  await db.add('hello world 1')
+  await db.add(`hello world from peer ${id}`)
 
   for await (const res of db.iterator()) {
     console.log(res)

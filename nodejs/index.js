@@ -51,7 +51,7 @@ const id = process.argv.length > 2 ? 2 : 1
 
 const blockstore = new LevelBlockstore(`./ipfs/${id}`)
 
-const libp2p = createLibp2p(libp2pOptions)
+const libp2p = await createLibp2p(libp2pOptions)
 
 const ipfs = await createHelia({ libp2p, blockstore })
 

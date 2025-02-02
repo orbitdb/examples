@@ -16,9 +16,9 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@chainsafe/libp2p-gossipsub": "^11.1.0",
-    "@orbitdb/core": "^2.0.1",
-    "helia": "^4.0.0",
+    "@chainsafe/libp2p-gossipsub": "^14.1.0",
+    "@orbitdb/core": "^2.4.3",
+    "helia": "^5.2.0",
     "process": "^0.11.10"
   }
 }

@@ -84,6 +84,7 @@ Install the 3rd party NPM packages:
 ```
 cd ./webpack
 npm i
+npm run build
 ```
 
 Launch a local web server. For example, you can use the [Python's HTTP server](https://docs.python.org/3/library/http.server.html):
